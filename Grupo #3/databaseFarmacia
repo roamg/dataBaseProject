@@ -1,0 +1,450 @@
+/*==============================================================*/
+/* DBMS name:      ORACLE Version 11g                           */
+/* Created on:     31/05/2016 09:58:30 p.m.                     */
+/*==============================================================*/
+
+
+alter table FARMACIA.DETALLE_VENTA
+   drop constraint FK_DETALLE__REFERENCE_PRODUCTO;
+
+alter table FARMACIA.DETALLE_VENTA
+   drop constraint FK_DETALLE__REFERENCE_VENTA;
+
+alter table FARMACIA.PRODUCTO
+   drop constraint FK_PRODUCTO_REFERENCE_CATEGORI;
+
+alter table FARMACIA.VENTA
+   drop constraint FK_VENTA_REFERENCE_CLIENTE;
+
+drop table FARMACIA.CATEGORIA cascade constraints;
+
+drop table FARMACIA.CLIENTE cascade constraints;
+
+drop table FARMACIA.DETALLE_VENTA cascade constraints;
+
+drop table FARMACIA.GENERAR_COMPROBANTE cascade constraints;
+
+drop table FARMACIA.MOSTRAR_CATEGORIA cascade constraints;
+
+drop table FARMACIA.MOSTRAR_CLIENTE cascade constraints;
+
+drop table FARMACIA.MOSTRAR_PRODUCTO cascade constraints;
+
+drop table FARMACIA.MOSTRAR_VENTA cascade constraints;
+
+drop table FARMACIA.PRODUCTO cascade constraints;
+
+drop table FARMACIA.USUARIO cascade constraints;
+
+drop table FARMACIA.VENTA cascade constraints;
+
+drop user FARMACIA;
+
+/*==============================================================*/
+/* User: FARMACIA                                               */
+/*==============================================================*/
+create user FARMACIA 
+  identified by "";
+
+/*==============================================================*/
+/* Table: CATEGORIA                                             */
+/*==============================================================*/
+create table FARMACIA.CATEGORIA 
+(
+   IDCATEGORIA          INT                  not null,
+   NOMBRE_CATEGORIA     VARCHAR2(50),
+   constraint PK_CATEGORIA primary key (IDCATEGORIA)
+         using index
+       pctfree 10
+       initrans 2
+       storage
+       (
+           initial 64K
+           next 1024K
+           minextents 1
+           maxextents unlimited
+       )
+       tablespace TBS_FARMACIA
+        logging
+)
+pctfree 10
+initrans 1
+storage
+(
+    initial 64K
+    next 1024K
+    minextents 1
+    maxextents unlimited
+)
+tablespace TBS_FARMACIA
+logging
+nocompress
+ monitoring
+ noparallel;
+
+/*==============================================================*/
+/* Table: CLIENTE                                               */
+/*==============================================================*/
+create table FARMACIA.CLIENTE 
+(
+   IDCLIENTE            int                  not null,
+   NOMBRE1              varchar2(15),
+   NOMBRE2              varchar2(15),
+   APELLIDO1            varchar2(15),
+   APELLIDO2            varchar2(15),
+   NIT                  number(15),
+   TELEFONO             number(15),
+   DIRECCION            varchar2(120),
+   constraint PK_CLIENTE primary key (IDCLIENTE)
+         using index
+       pctfree 10
+       initrans 2
+       storage
+       (
+           initial 64K
+           next 1024K
+           minextents 1
+           maxextents unlimited
+       )
+       tablespace TBS_FARMACIA
+        logging
+)
+pctfree 10
+initrans 1
+storage
+(
+    initial 64K
+    next 1024K
+    minextents 1
+    maxextents unlimited
+)
+tablespace TBS_FARMACIA
+logging
+nocompress
+ monitoring
+ noparallel;
+
+/*==============================================================*/
+/* Table: DETALLE_VENTA                                         */
+/*==============================================================*/
+create table FARMACIA.DETALLE_VENTA 
+(
+   IDDETALLE_VENTA      int                  not null,
+   IDVENTA              int,
+   IDPRODUCTO           int,
+   CANTIDAD             number(18,2),
+   PRECIO_UNITARIO      NUMBER(18,2),
+   constraint PK_DETALLE_VENTA primary key (IDDETALLE_VENTA)
+         using index
+       pctfree 10
+       initrans 2
+       storage
+       (
+           initial 64K
+           next 1024K
+           minextents 1
+           maxextents unlimited
+       )
+       tablespace TBS_FARMACIA
+        logging
+)
+pctfree 10
+initrans 1
+storage
+(
+    initial 64K
+    next 1024K
+    minextents 1
+    maxextents unlimited
+)
+tablespace TBS_FARMACIA
+logging
+nocompress
+ monitoring
+ noparallel;
+
+/*==============================================================*/
+/* Table: GENERAR_COMPROBANTE                                   */
+/*==============================================================*/
+create table FARMACIA.GENERAR_COMPROBANTE 
+(
+   IDVENTA              number(10),
+   NOMBRE               varchar2(25),
+   APELLIDOS            varchar2(25),
+   NIT                  varchar2(25),
+   FEHCA_VENTA          date,
+   TIPO_DOCUMENTO       varchar2(25),
+   NUM_DOCUMENTO        varchar2(25),
+   DESCRIPCION          varchar2(25),
+   CANTIDAD             number(10,2),
+   PRECIO_UNITARIO      NUMBER(10,2),
+   TOTAL_PARCIAL        number(10,2)
+)
+pctfree 10
+initrans 1
+storage
+(
+    initial 64K
+    next 1024K
+    minextents 1
+    maxextents unlimited
+)
+tablespace TBS_FARMACIA
+logging
+nocompress
+ monitoring
+ noparallel;
+
+/*==============================================================*/
+/* Table: MOSTRAR_CATEGORIA                                     */
+/*==============================================================*/
+create table FARMACIA.MOSTRAR_CATEGORIA 
+(
+   ID_CATEGORIA         number(10),
+   NOMBRE_CATEGORIA     varchar2(25)
+)
+pctfree 10
+initrans 1
+storage
+(
+    initial 64K
+    next 1024K
+    minextents 1
+    maxextents unlimited
+)
+tablespace TBS_FARMACIA
+logging
+nocompress
+ monitoring
+ noparallel;
+
+/*==============================================================*/
+/* Table: MOSTRAR_CLIENTE                                       */
+/*==============================================================*/
+create table FARMACIA.MOSTRAR_CLIENTE 
+(
+   IDCLIENTE            number(10),
+   NOMBRE               varchar2(25),
+   APELLIDOS            varchar2(25),
+   DIRECCION            varchar2(50),
+   TELEFONO             varchar2(25),
+   NIT                  varchar2(25)
+)
+pctfree 10
+initrans 1
+storage
+(
+    initial 64K
+    next 1024K
+    minextents 1
+    maxextents unlimited
+)
+tablespace TBS_FARMACIA
+logging
+nocompress
+ monitoring
+ noparallel;
+
+/*==============================================================*/
+/* Table: MOSTRAR_PRODUCTO                                      */
+/*==============================================================*/
+create table FARMACIA.MOSTRAR_PRODUCTO 
+(
+   IDPRODUCTO           number(10),
+   IDCATEGORIA          number(10),
+   NOMBRE_CATEGORIA     varchar2(50),
+   NOMBRE               varchar2(25),
+   DESCRIPCION          varchar2(25),
+   STOCK                NUMBER(10,2),
+   PRECIO_VENTA         NUMBER(10,2),
+   PRECIO_COMPRA        NUMBER(10,2),
+   FECHA_VENCIMIENTO    date,
+   IMAGEN               CHAR(10)
+)
+pctfree 10
+initrans 1
+storage
+(
+    initial 64K
+    next 1024K
+    minextents 1
+    maxextents unlimited
+)
+tablespace TBS_FARMACIA
+logging
+nocompress
+ monitoring
+ noparallel;
+
+/*==============================================================*/
+/* Table: MOSTRAR_VENTA                                         */
+/*==============================================================*/
+create table FARMACIA.MOSTRAR_VENTA 
+(
+   IDVENTA              number(10),
+   IDCLIENTE            number(10),
+   APELLIDOS            varchar2(25),
+   NIT                  varchar2(25),
+   FECHA_VENTA          date,
+   TIPO_DOCUMENTO       varchar2(25),
+   NUM_DOCUMENTO        number(10)
+)
+pctfree 10
+initrans 1
+storage
+(
+    initial 64K
+    next 1024K
+    minextents 1
+    maxextents unlimited
+)
+tablespace TBS_FARMACIA
+logging
+nocompress
+ monitoring
+ noparallel;
+
+/*==============================================================*/
+/* Table: PRODUCTO                                              */
+/*==============================================================*/
+create table FARMACIA.PRODUCTO 
+(
+   IDPRODUCTO           int                  not null,
+   IDCATEGORIA          int,
+   NOMBRE               varchar2(50),
+   DESCRIPCION          varchar2(100),
+   STOCK                number(8,2),
+   PRECIO_COMPRA        number(8,2),
+   PRECIO_VENTA         number(8,2),
+   FECHA_VENCIMIENTO    date,
+   constraint PK_PRODUCTO primary key (IDPRODUCTO)
+         using index
+       pctfree 10
+       initrans 2
+       storage
+       (
+           initial 64K
+           next 1024K
+           minextents 1
+           maxextents unlimited
+       )
+       tablespace TBS_FARMACIA
+        logging
+)
+pctfree 10
+initrans 1
+storage
+(
+    initial 64K
+    next 1024K
+    minextents 1
+    maxextents unlimited
+)
+tablespace TBS_FARMACIA
+logging
+nocompress
+ monitoring
+ noparallel;
+
+/*==============================================================*/
+/* Table: USUARIO                                               */
+/*==============================================================*/
+create table FARMACIA.USUARIO 
+(
+   IDUSUARIO            int                  not null,
+   NOMBRE               varchar2(50),
+   APELLIDOS            varchar2(50),
+   NIT                  varchar2(50),
+   DIRECCION            varchar2(100),
+   TELEFONO             varchar2(50),
+   LOGIN                varchar2(50),
+   PASSWORD             varchar2(15),
+   ACCESO               varchar2(1),
+   constraint PK_USUARIO primary key (IDUSUARIO)
+         using index
+       pctfree 10
+       initrans 2
+       storage
+       (
+           initial 64K
+           next 1024K
+           minextents 1
+           maxextents unlimited
+       )
+       tablespace TBS_FARMACIA
+        logging
+)
+pctfree 10
+initrans 1
+storage
+(
+    initial 64K
+    next 1024K
+    minextents 1
+    maxextents unlimited
+)
+tablespace TBS_FARMACIA
+logging
+nocompress
+ monitoring
+ noparallel;
+
+/*==============================================================*/
+/* Table: VENTA                                                 */
+/*==============================================================*/
+create table FARMACIA.VENTA 
+(
+   IDVENTA              int                  not null,
+   IDCLIENTE            int,
+   FECHA_VENTA          date,
+   TIPO_DOCUMENTO       varchar2(100),
+   NUM_DOCUMENTO        varchar2(50),
+   constraint PK_VENTA primary key (IDVENTA)
+         using index
+       pctfree 10
+       initrans 2
+       storage
+       (
+           initial 64K
+           next 1024K
+           minextents 1
+           maxextents unlimited
+       )
+       tablespace TBS_FARMACIA
+        logging
+)
+pctfree 10
+initrans 1
+storage
+(
+    initial 64K
+    next 1024K
+    minextents 1
+    maxextents unlimited
+)
+tablespace TBS_FARMACIA
+logging
+nocompress
+ monitoring
+ noparallel;
+
+alter table FARMACIA.DETALLE_VENTA
+   add constraint FK_DETALLE__REFERENCE_PRODUCTO foreign key (IDPRODUCTO)
+      references FARMACIA.PRODUCTO (IDPRODUCTO)
+      not deferrable;
+
+alter table FARMACIA.DETALLE_VENTA
+   add constraint FK_DETALLE__REFERENCE_VENTA foreign key (IDVENTA)
+      references FARMACIA.VENTA (IDVENTA)
+      not deferrable;
+
+alter table FARMACIA.PRODUCTO
+   add constraint FK_PRODUCTO_REFERENCE_CATEGORI foreign key (IDCATEGORIA)
+      references FARMACIA.CATEGORIA (IDCATEGORIA)
+      not deferrable;
+
+alter table FARMACIA.VENTA
+   add constraint FK_VENTA_REFERENCE_CLIENTE foreign key (IDCLIENTE)
+      references FARMACIA.CLIENTE (IDCLIENTE)
+      not deferrable;
+
